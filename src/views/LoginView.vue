@@ -15,7 +15,7 @@
                 </div>
                 <button type="submit" class="btn btn-primary" :disabled="isLoading">{{ isLoading ? 'Login...' : 'Login' }}
         </button>
-                <p class="form-switch">>Don't have an account? <router-link to="/register">Register</router-link></p>
+                <p class="form-switch">Don't have an account? <router-link to="/register">Register</router-link></p>
             </form>
         </div>
     </main>

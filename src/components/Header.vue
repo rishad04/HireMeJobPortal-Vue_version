@@ -36,3 +36,9 @@ const handleLogout = async () => {
   router.push('/');
 };
 </script>
+
+<style scoped>
+.ml-3 {
+  margin-left: 1rem;
+}
+</style>

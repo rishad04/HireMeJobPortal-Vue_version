@@ -37,6 +37,7 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import apiClient from '../api';
 import { useToast } from '../composables/useToast';
+import { useApplicationStore } from '../stores/application';
 import { useAuthStore } from '../stores/auth';
 
 // Reactive state for the form data
@@ -53,6 +54,8 @@ const errorMessage = ref('');
 const router = useRouter();
 const authStore = useAuthStore();
 const { showToast } = useToast();
+
+const appStore = useApplicationStore();
 
 // Method to handle form submission
 const handleRegister = async () => {
@@ -76,6 +79,19 @@ const handleRegister = async () => {
     authStore.setAuthData(user, token);
 
      showToast('success', response.data.message);
+
+     // Check if the user had a pending job application intent
+    if (appStore.intendedJobId) {
+        const jobId = appStore.intendedJobId;
+        appStore.clearIntent(); // Clear the intent immediately
+
+        // Fetch the specific job data
+        const jobResponse = await apiClient.get(`/api/jobs/${jobId}`);
+
+        // Open the modal with the fetched job data
+        appStore.openApplicationModal(jobResponse.data);
+    }
+
     // Redirect to the dashboard instead of the login page
     router.push('/dashboard');
 

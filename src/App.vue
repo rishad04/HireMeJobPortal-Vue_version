@@ -1,5 +1,6 @@
 <script setup>
 import { RouterView } from 'vue-router';
+import ApplicationModal from './components/ApplicationModal.vue';
 import Footer from './components/Footer.vue';
 import Header from './components/Header.vue';
 </script>
@@ -9,6 +10,8 @@ import Header from './components/Header.vue';
     <Header />
     <RouterView />
     <Footer />
+
+    <ApplicationModal />
   </div>
 
 </template>

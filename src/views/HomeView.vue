@@ -37,16 +37,25 @@
         </div>
       </div>
 
+
+
       <div v-else-if="jobs.length > 0" class="job-listings">
-        <div v-for="job in jobs" :key="job.id" class="job-card">
+          <div v-for="job in jobs" :key="job.id" class="job-card">
           <div class="job-card-header">
             <h3 class="job-title">{{ job.title }}</h3>
             <span class="job-type full-time">{{ job.type || 'Full Time' }}</span>
           </div>
-          <p class="company-name">{{ job.company ? job.company.name : 'N/A' }}</p>
+
+          <p class="company-name">{{ job.company || 'N/A' }}</p>
           <p class="location">{{ job.location }}</p>
+
           <div class="job-card-footer">
-            <a href="#" class="btn btn-primary">Apply Now</a>
+            <button v-if="authStore.isAuthenticated && job.has_submitted" class="btn" disabled>
+              Applied
+            </button>
+            <button v-else @click="handleApplyClick(job)" class="btn btn-primary">
+              Apply Now
+            </button>
           </div>
         </div>
       </div>
@@ -61,9 +70,10 @@
 <script setup>
 
 import { computed, onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
 import apiClient from '../api';
+import { useApplicationStore } from '../stores/application';
 import { useAuthStore } from '../stores/auth';
-
 // --- STATE ---
 const jobs = ref([]);
 const isLoading = ref(true);
@@ -71,11 +81,25 @@ const authStore = useAuthStore(); // Get auth store for personalization
 const searchQuery = ref(''); // Holds the text from the search input
 const activeSearchQuery = ref('');
 
+const appStore = useApplicationStore(); // <-- Get reference to app store
+const router = useRouter();
+
 const isSearchActive = computed(() => activeSearchQuery.value !== '');
 
 const searchTitle = computed(() => {
   return isSearchActive.value ? `Search Results for: "${activeSearchQuery.value}"` : 'Featured Jobs';
 });
+
+const handleApplyClick = (job) => {
+  if (authStore.isAuthenticated) {
+    // If user is logged in, open the modal directly.
+    appStore.openApplicationModal(job);
+  } else {
+    // If user is logged out, set their intent and redirect to login.
+    appStore.setIntent(job.id);
+    router.push({ name: 'login' });
+  }
+};
 
 // --- METHODS ---
 /**
@@ -94,7 +118,13 @@ const fetchJobs = async (query = '') => {
 
   try {
     const response = await apiClient.get(url);
-    jobs.value = response.data; // Store the fetched jobs
+
+    // console.log(response);
+
+    if (response.data && response.data) {
+      jobs.value = response.data.data;
+    }
+
   } catch (error)
   {
     console.error('Failed to fetch jobs:', error);

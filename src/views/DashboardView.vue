@@ -69,9 +69,13 @@
                 <td><span class="status-tag active">{{ app.status }}</span></td>
                 <td><span class="status-tag active">{{ app.payment_status }}</span></td>
  <td>
-                  <button v-if="app.status !== 'submitted'" @click="handleDelete(app.id)" class="btn-delete" title="Delete Application">
+                  <!-- <button v-if="app.status !== 'submitted'" @click="handleDelete(app.id)" class="btn-delete" title="Delete Application">
                     &times;
-                  </button>
+                  </button> -->
+                  <button v-if="app.status !== 'submitted'" @click="handleDelete(app.id)" class="btn-delete" title="Delete Application">
+        &times;
+    </button>
+    <span v-else>{{ app.status === 'submitted' ? '-' : '' }}</span>
                 </td>
 
               </tr>

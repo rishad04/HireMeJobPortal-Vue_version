@@ -1,4 +1,5 @@
 import { createPinia } from 'pinia';
+import 'sweetalert2/dist/sweetalert2.min.css';
 import { createApp } from 'vue';
 import './assets/main.css';
 

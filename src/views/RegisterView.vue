@@ -36,6 +36,7 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import apiClient from '../api';
+import { useToast } from '../composables/useToast';
 import { useAuthStore } from '../stores/auth';
 
 // Reactive state for the form data
@@ -51,6 +52,7 @@ const isLoading = ref(false);
 const errorMessage = ref('');
 const router = useRouter();
 const authStore = useAuthStore();
+const { showToast } = useToast();
 
 // Method to handle form submission
 const handleRegister = async () => {
@@ -73,6 +75,7 @@ const handleRegister = async () => {
     // Use the Pinia store to set the auth state
     authStore.setAuthData(user, token);
 
+     showToast('success', response.data.message);
     // Redirect to the dashboard instead of the login page
     router.push('/dashboard');
 

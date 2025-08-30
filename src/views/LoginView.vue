@@ -25,6 +25,7 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import apiClient from '../api';
+import { useToast } from '../composables/useToast';
 import { useAuthStore } from '../stores/auth';
 
 const form = ref({
@@ -36,6 +37,7 @@ const isLoading = ref(false);
 const errorMessage = ref('');
 const router = useRouter();
 const authStore = useAuthStore();
+const { showToast } = useToast();
 
 const handleLogin = async () => {
   isLoading.value = true;
@@ -55,6 +57,8 @@ const handleLogin = async () => {
 
     // Use the Pinia store to set the auth state
     authStore.setAuthData(user, token);
+
+    showToast('success', response.data.message);
 
     // Redirect to the dashboard instead of the login page
     router.push('/dashboard');

@@ -20,15 +20,18 @@
 
 <script setup>
 import { RouterLink, useRouter } from 'vue-router';
+import { useToast } from '../composables/useToast';
 import { useAuthStore } from '../stores/auth';
 
 const authStore = useAuthStore();
 const router = useRouter();
+const { showToast } = useToast();
 
 const handleLogout = async () => {
   // Call the Pinia action to clear local state and call the API
   await authStore.clearAuthData();
 
+  showToast('success', 'Logout Successfully!')
   // Redirect to the home page
   router.push('/');
 };

@@ -6,7 +6,7 @@ import App from './App.vue';
 import './assets/main.css';
 import router from './router';
 
-apiClient.get('api/sanctum/csrf-cookie').then(() => {
+apiClient.get('/sanctum/csrf-cookie').then(() => {
     const app = createApp(App);
 
     app.use(createPinia());

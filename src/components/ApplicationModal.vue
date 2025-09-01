@@ -19,13 +19,13 @@
           <p class="instruction">Please select a payment method to proceed.</p>
 
           <div class="payment-methods">
-            <div
+            <!-- <div
               class="payment-option"
               :class="{ selected: selectedPayment === 'sslcommerz' }"
               @click="selectedPayment = 'sslcommerz'"
             >
               <img src="/images/sslcommerz.png" alt="SSLCommerz">
-            </div>
+            </div> -->
             <div
               class="payment-option"
               :class="{ selected: selectedPayment === 'stripe' }"
@@ -37,8 +37,17 @@
         </div>
 
         <div class="modal-actions">
-          <button @click="handleConfirmApplication" class="btn btn-primary">
-            Confirm Application & Pay
+          <button
+            @click="handleConfirmApplication"
+            class="btn btn-primary"
+            :disabled="isProcessing"
+            :class="{ 'is-loading': isProcessing }"
+          >
+            <span v-if="isProcessing" class="spinner"></span>
+
+            <span>
+              {{ isProcessing ? 'Processing...' : 'Confirm Application & Pay' }}
+            </span>
           </button>
         </div>
       </div>
@@ -189,5 +198,31 @@ const handleConfirmApplication = async () => {
 .modal-actions {
   margin-top: 2rem;
   text-align: right;
+}
+/* Add these new styles inside the <style scoped> tag */
+
+/* Style for the button when it's in a loading state */
+.btn.is-loading {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* The spinner element */
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s ease-in-out infinite;
+  margin-right: 8px;
+}
+
+/* The spinning animation */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 </style>

@@ -29,6 +29,12 @@ const router = createRouter({
       component: () => import('../views/DashboardView.vue'),
       meta: { requiresAuth: true }
     },
+    {
+      path: '/Payment-success/Upload-cv',
+      name: 'payment-success-upload-cv',
+      component: () => import('../views/PaymentSuccessView.vue'),
+      meta: { requiresAuth: true }
+    },
     // {
     //   path: '/profile',
     //   name: 'profile',
